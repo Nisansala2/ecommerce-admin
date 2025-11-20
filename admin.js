@@ -111,6 +111,11 @@ const components = {
   );
 
   app.use(admin.options.rootPath, adminRouter);
+
+  app.get('/', (req, res) => {
+  res.redirect(admin.options.rootPath);
+});
+
 }
 
 export default buildAdmin;
