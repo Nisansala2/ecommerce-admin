@@ -2,6 +2,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { User } from './models/index.js';
+import express from 'express';
+
+const app = express();
 
 dotenv.config();
 
@@ -32,5 +35,7 @@ const authenticateMiddleware = (req, res, next) => {
     return res.status(401).json({ error: 'Invalid token' });
   }
 };
+
+
 
 export { login, authenticateMiddleware };

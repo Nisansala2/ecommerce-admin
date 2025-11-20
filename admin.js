@@ -4,6 +4,7 @@ import AdminJSExpress from '@adminjs/express';
 import AdminJSSequelize from '@adminjs/sequelize';
 import bcrypt from 'bcrypt';
 import { sequelize, User, Category, Product, Order, OrderItem, Setting } from './models/index.js';
+import { login, authenticateMiddleware } from "./auth.js";
 
 
 AdminJS.registerAdapter(AdminJSSequelize);
@@ -22,8 +23,11 @@ function buildAdmin(app) {
         ]
     });
 
-    const router = AdminJSExpress.buildRouter(admin);
-    app.use(admin.options.rootPath, router);
+const adminRouter = AdminJSExpress.buildRouter(admin);
+
+app.use('/admin',  adminRouter);
+    
+
 }
 
 export default buildAdmin;   // ✔ Important
