@@ -12,8 +12,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(express.static('public'));
-app.use(routes);
+app.use(express.json());
 
 //build admin interface
 buildAdmin(app);
@@ -54,10 +53,10 @@ app.get('/api/admin-data', authenticateMiddleware, (req, res) => {
 });
 
 
+// Redirect root to AdminJS login page
 
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve('public/login.html'));
-});
+
+
 
 // start server
 app.listen(PORT, () => {
