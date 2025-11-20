@@ -4,16 +4,21 @@ import { sequelize, User } from './models/index.js';
 import buildAdmin from './admin.js';
 import routes from './routes.js';
 import bcrypt from 'bcrypt';
+import AdminJSExpress from '@adminjs/express';
+import { login, authenticateMiddleware } from "./auth.js";
+import path from 'path';
 
 dotenv.config();
 
 const app = express();
 
-app.use(express.json());
+app.use(express.static('public'));
 app.use(routes);
 
 //build admin interface
 buildAdmin(app);
+
+
 
 const PORT = process.env.PORT || 4000;
 async function start() {
@@ -30,11 +35,28 @@ async function start() {
       console.log('Seeded admin user:', adminEmail);
     }
   }
+
+  // seed test user if not exists
+  const testEmail = 'user@example.com';
+  const testPassword = 'password123';
+  const existingTest = await User.findOne({ where: { email: testEmail } });
+  if(!existingTest){
+    const hashed = await bcrypt.hash(testPassword, 10);
+    await User.create({ email: testEmail, name: 'Test User', password: hashed, role: 'user' });
+    console.log('Seeded test user:', testEmail);
+  }
 }
 
-// simple route
+app.post('/api/login', login);
+
+app.get('/api/admin-data', authenticateMiddleware, (req, res) => {
+  res.json({ message: "You are authorized!", user: req.user });
+});
+
+
+
 app.get('/', (req, res) => {
-  res.send('Server is running!');
+  res.sendFile(path.resolve('public/login.html'));
 });
 
 // start server
