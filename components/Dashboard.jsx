@@ -5,12 +5,16 @@ import { ApiClient } from 'adminjs';
 const Dashboard = () => {
   const [stats, setStats] = useState({
     role : null,
+    name: '',
+    email: '',
+    recentOrders: [],
     message: '',
     totalUsers: 0,
     totalProducts: 0,
     totalOrders: 0,
     totalRevenue: 0,
   });
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,14 +35,84 @@ const Dashboard = () => {
 
 
 
-  if (stats.role === 'user') {
-    return (
-      <Box p="xl">
-        <H2>📊 User Dashboard</H2>
-        
+ if (stats.role === "user") {
+  return (
+    <Box p="xl">
+
+      <H2>👤 User Dashboard</H2>
+
+      {/* Profile Section */}
+      <Box
+        mt="lg"
+        p="lg"
+        variant="grey"
+        style={{
+          borderRadius: "12px",
+          background: "#f8f9fa",
+          border: "1px solid #e5e7eb"
+        }}
+      >
+        <Text fontWeight="bold" fontSize="lg">Your Profile</Text>
+        <Text mt="sm">Name: {stats.name || "N/A"}</Text>
+        <Text>Email: {stats.email}</Text>
       </Box>
-    );
-  }
+
+      {/* Orders Section */}
+      <Box
+        mt="xl"
+        p="lg"
+        variant="grey"
+        style={{
+          borderRadius: "12px",
+          background: "#f8f9fa",
+          border: "1px solid #e5e7eb"
+        }}
+      >
+        <Text fontWeight="bold" fontSize="lg">Your Recent Orders</Text>
+
+        {stats.recentOrders?.length > 0 ? (
+          stats.recentOrders.map((order) => (
+            <Box
+              key={order.id}
+              mt="md"
+              p="md"
+              style={{
+                borderRadius: "8px",
+                background: "white",
+                border: "1px solid #ddd"
+              }}
+            >
+              <Text>Order ID: {order.id}</Text>
+              <Text>Total: ${order.total}</Text>
+              <Text>Status: {order.status}</Text>
+            </Box>
+          ))
+        ) : (
+          <Text mt="sm">No recent orders found.</Text>
+        )}
+      </Box>
+
+      {/* Activity Section */}
+      <Box
+        mt="xl"
+        p="lg"
+        variant="grey"
+        style={{
+          borderRadius: "12px",
+          background: "#f8f9fa",
+          border: "1px solid #e5e7eb"
+        }}
+      >
+        <Text fontWeight="bold" fontSize="lg">📅 Recent Activity</Text>
+        <Text mt="sm">• Logged in recently</Text>
+        <Text>• Browsed product categories</Text>
+        <Text>• No notifications</Text>
+      </Box>
+
+    </Box>
+  );
+}
+
 
   if (stats.role === 'admin') {
 

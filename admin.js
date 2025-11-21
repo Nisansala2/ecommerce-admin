@@ -106,7 +106,10 @@ async function buildAdmin(app) {
       } else  {(currentUser.role === 'user')
       return {
         role: 'user',
-        message: "You are a normal user. Limited access dashboard"
+        message: "You are a normal user. Limited access dashboard",
+        email: currentUser.email,
+        name: currentUser.name || 'N/A',
+        
       };
     }
 
