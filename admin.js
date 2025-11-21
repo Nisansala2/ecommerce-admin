@@ -36,12 +36,48 @@ async function buildAdmin(app) {
     componentLoader,
 
     resources: [
-      { resource: User },
+      { 
+        resource: User,
+        options: {
+          navigation:"admin only",
+          actions: {
+            new: { isAccessible: ({ currentAdmin }) => currentAdmin.role === 'admin' },
+            edit: { isAccessible: ({ currentAdmin }) => currentAdmin.role === 'admin' },
+            delete: { isAccessible: ({ currentAdmin }) => currentAdmin.role === 'admin' },
+            list: { isAccessible: ({ currentAdmin }) => currentAdmin.role === 'admin' },
+
+          },
+        }
+       },
+
       { resource: Category },
-      { resource: Product },
+      { resource: Product,
+        options: {
+          navigation:"admin only",
+          actions: {
+            list:{isAccessible: () => true},
+            show:{isAccessible: () => true},
+
+            new: { isAccessible: ({ currentAdmin }) => currentAdmin.role === 'admin' },
+            edit: { isAccessible: ({ currentAdmin }) => currentAdmin.role === 'admin' },
+            delete: { isAccessible: ({ currentAdmin }) => currentAdmin.role === 'admin' },
+          }
+        }
+       },
       { resource: Order },
       { resource: OrderItem },
-      { resource: Setting },
+      { resource: Setting ,
+        options: {
+         navigation :"system",
+         actions: {
+          list :{isAccessible: ({ currentAdmin }) => currentAdmin.role ==='admin'},
+          edit :{isAccessible: ({ currentAdmin }) => currentAdmin.role ==='admin'},
+          delete :{isAccessible: ({ currentAdmin }) => currentAdmin.role ==='admin'},
+          new :{isAccessible: ({ currentAdmin }) => currentAdmin.role ==='admin'},
+
+        }
+      }
+      },
     ],
 
     dashboard: {

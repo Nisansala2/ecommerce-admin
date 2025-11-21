@@ -8,6 +8,7 @@ import AdminJSExpress from '@adminjs/express';
 import { login, authenticateMiddleware } from "./auth.js";
 import path from 'path';
 
+
 dotenv.config();
 
 const app = express();
@@ -16,6 +17,17 @@ app.use(express.json());
 
 //build admin interface
 buildAdmin(app);
+
+const testConnection = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('✅ Connected to Supabase successfully');
+  } catch (err) {
+    console.error('❌ Cannot connect to Supabase:', err.message);
+  }
+};
+
+testConnection();
 
 
 
