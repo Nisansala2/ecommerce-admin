@@ -1,5 +1,3 @@
-// admin.js
-
 import session from 'express-session';
 import AdminJS from 'adminjs';
 import AdminJSExpress from '@adminjs/express';
@@ -25,15 +23,12 @@ async function buildAdmin(app) {
 
   const componentLoader = new ComponentLoader();
 
- 
-
-const components = {
+ const components = {
   Dashboard: await componentLoader.add(
     'Dashboard',
     path.join(__dirname, 'components', 'Dashboard.jsx')
   ),
 };
-
 
   const admin = new AdminJS({
     databases: [sequelize],
@@ -51,21 +46,38 @@ const components = {
 
     dashboard: {
       component: components.Dashboard,
-      handler: async () => {
+      handler: async (req,res,context) => {
+
+        const currentUser= req.session.adminUser;
+
+        if(currentUser.role=="admin") {
+
+        const {currentAdmin } = context;
+        const userole = currentAdmin?.role;
         const totalRevenue = await Order.sum('total') || 0;
         const totalUsers = await User.count();
         const totalProducts = await Product.count();
         const totalOrders = await Order.count();
 
         
-
         return {
+          role: userole,
+          totalRevenue,
           totalUsers,
           totalProducts,
           totalOrders,
-          totalRevenue,
-
         };
+      } else  {(currentUser.role === 'user')
+      return {
+        role: 'user',
+        message: "You are a normal user. Limited access dashboard"
+      };
+    }
+
+   
+   
+
+       
       },
     },
   });

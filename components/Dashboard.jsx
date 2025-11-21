@@ -4,6 +4,8 @@ import { ApiClient } from 'adminjs';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
+    role : null,
+    message: '',
     totalUsers: 0,
     totalProducts: 0,
     totalOrders: 0,
@@ -26,6 +28,19 @@ const Dashboard = () => {
     boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
     textAlign: 'center',
   };
+
+
+
+  if (stats.role === 'user') {
+    return (
+      <Box p="xl">
+        <H2>📊 User Dashboard</H2>
+        
+      </Box>
+    );
+  }
+
+  if (stats.role === 'admin') {
 
   return (
     <Box p="xl">
@@ -61,6 +76,7 @@ const Dashboard = () => {
       </Box>
     </Box>
   );
+}
 };
 
 export default Dashboard;
