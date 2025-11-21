@@ -57,29 +57,14 @@ const components = {
         const totalProducts = await Product.count();
         const totalOrders = await Order.count();
 
-        const revenueByCategory = await sequelize.query(`
-          SELECT c.name as category, SUM(o.total) as revenue
-          FROM orders o
-          JOIN order_items oi ON o.id = oi.orderId
-          JOIN products p ON oi.productId = p.id
-          JOIN categories c ON p.categoryId = c.id
-          GROUP BY c.id, c.name
-          ORDER BY revenue DESC
-        `, { type: sequelize.QueryTypes.SELECT });
-
-        const topProductsByStock = await Product.findAll({
-          attributes: ['name', 'stock'],
-          order: [['stock', 'DESC']],
-          limit: 5
-        });
+        
 
         return {
           totalUsers,
           totalProducts,
           totalOrders,
           totalRevenue,
-          revenueByCategory,
-          topProductsByStock,
+
         };
       },
     },
